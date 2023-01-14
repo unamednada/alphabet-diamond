@@ -1,4 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System.Net;
+using System.Net.Mail;
+
 Console.WriteLine("Welcome to the Diamond Printer!");
 
 Console.WriteLine("Please enter a letter: ");
@@ -41,4 +43,27 @@ for (int i = diamond.Length - 2; i >= 0; i--)
     Console.WriteLine(diamond[i]);
 }
 
-Console.WriteLine("Press any key to exit!");
+Console.WriteLine("Would you like to receive this diamond as an email? (Y/N)");
+string answer = Console.ReadLine().ToUpper();
+
+Func<string, string, bool> sendEmail = (email, body) =>
+{
+    var smtpClient = new SmtpClient("smtp.gmail.com")
+    {
+        Port = 587,
+        Credentials = new NetworkCredential(USERNAME, PASSWORD),
+        EnableSsl = true,
+    };
+
+    smtpClient.Send(USERNAME, email, "Diamond", body);
+    return true;
+};
+
+if (answer == "Y")
+{
+    Console.WriteLine("Please enter your email address: ");
+    string email = Console.ReadLine();
+    Console.WriteLine("Sending email to " + email);
+    sendEmail(email, diamond.ToString());
+    Console.WriteLine("Email sent!");
+}
