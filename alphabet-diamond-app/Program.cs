@@ -48,14 +48,22 @@ string answer = Console.ReadLine().ToUpper();
 
 Func<string, string, bool> sendEmail = (email, body) =>
 {
+
     var smtpClient = new SmtpClient("smtp.gmail.com")
     {
         Port = 587,
         Credentials = new NetworkCredential(USERNAME, PASSWORD),
         EnableSsl = true,
     };
-
-    smtpClient.Send(USERNAME, email, "Diamond", body);
+    try
+    {
+        smtpClient.Send(USERNAME, email, "Diamond", body);
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+        return false;
+    }
     return true;
 };
 
@@ -64,6 +72,20 @@ if (answer == "Y")
     Console.WriteLine("Please enter your email address: ");
     string email = Console.ReadLine();
     Console.WriteLine("Sending email to " + email);
-    sendEmail(email, diamond.ToString());
-    Console.WriteLine("Email sent!");
+    bool success = sendEmail(email, diamond.ToString());
+
+    if (success)
+    {
+        Console.WriteLine("Email sent!");
+    }
+    else
+    {
+        Console.WriteLine("Email failed to send.");
+    }
 }
+else
+{
+    Console.WriteLine("Email not sent.");
+}
+
+Console.WriteLine("Press any key to exit.");
