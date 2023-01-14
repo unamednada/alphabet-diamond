@@ -1,6 +1,9 @@
 ﻿using System.Net;
 using System.Net.Mail;
 
+string USERNAME = "user@mailcom";
+string PASSWORD = "password";
+
 Console.WriteLine("Welcome to the Diamond Printer!");
 
 Console.WriteLine("Please enter a letter: ");
